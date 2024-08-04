@@ -8,19 +8,18 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet, NgFor],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  http  = inject(HttpClient);
+  http = inject(HttpClient);
   title = 'DatingApp';
   users: any;
-  
+
   ngOnInit(): void {
     this.http.get('https://localhost:5001/Users').subscribe({
-      next: Response => this.users = Response,
-      error: error => console.log(error),
-    complete: () =>console.log('completed')
-    })
+      next: (Response) => (this.users = Response),
+      error: (error) => console.log(error),
+      complete: () => console.log('completed'),
+    });
   }
-
 }

@@ -1,6 +1,7 @@
 using API.Controllers;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,15 @@ builder.Services.AddDbContext<DataContext>(options => {
 
 });
 
-builder.Services.AddCors();
+builder.Services.AddCors(options=>{
+
+    options.AddPolicy("AllowSpecificOrigin", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 // builder.Services.AddEndpointsApiExplorer();
@@ -48,7 +57,7 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast")
 
 .WithOpenApi();
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200","https://localhost:4200"));
+app.UseCors("AllowSpecificOrigin");
 app.ConfigApi();
 app.Run();
 
