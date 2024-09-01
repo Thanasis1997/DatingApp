@@ -19,8 +19,16 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            try{
+
+            
+                var users = await _context.Users.ToListAsync();
             return Ok(users);
+            }catch(Exception ex){
+                Console.WriteLine(ex.Message);
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpGet("{id}")]
